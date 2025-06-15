@@ -1,0 +1,106 @@
+commodity = {
+    "storage": {
+        "fruits": {
+            "apple": [50, "kg"],
+            "pear": [30, "kg"],
+            "orange": [55, "kg"],
+            "mandarin": [40, "kg"],
+            "banana": [35, "kg"],
+            "avocado": [15, "kg"],
+            "coconut": [20, "kg"],
+            "kiwi": [15, "kg"],
+            "lemon": [20, "kg"],
+            "nectarine": [30, "kg"],
+        },
+        "vegetables": {
+            "potato": [180, "kg"],
+            "cucumber": [40, "kg"],
+            "carrot": [45, "kg"],
+            "tomato": [35, "kg"],
+            "bell pepper": [30, "kg"],
+            "onion": [30, "kg"],
+            "garlic": [20, "kg"],
+            "lettuce": [25, "kg"],
+            "mushroom": [35, "kg"],
+            "cabbage": [30, "kg"],
+        },
+        "snacks": {
+            "popcorn salt": [60, "pcs"],
+            "popcorn cheese": [60, "pcs"],
+            "popcorn bacon": [60, "pcs"],
+            "Cheetos cheese": [75, "pcs"],
+            "Cheetos BBQ": [75, "pcs"],
+            "Cheetos ketchup": [75, "pcs"],
+            "Cheetos paprika": [75, "pcs"],
+            "Cheetos pizza": [75, "pcs"],
+            "Lays salt": [110, "pcs"],
+            "Lays cheese": [110, "pcs"],
+            "Lays bacon": [110, "pcs"],
+            "Lays ribs": [110, "pcs"],
+            "Lays crab": [110, "pcs"]
+        },
+        "dairy products": {
+            "cow milk": [40, "L"],
+            "cow butter": [35, "pcs"],
+            "cow cheese": [30, "pcs"],
+            "berry yogurt": [25, "L"],
+            "fruit yogurt": [25, "L"]
+        },
+        "fish": {
+            "atlantic trout fillet": [35, "kg"],
+            "tuna fillet": [40, "kg"],
+            "salmon fillet": [35, "kg"]
+        },
+        "meat": {
+            "chicken fillet": [65, "kg"],
+            "beef": [45, "kg"],
+            "mutton": [20, "kg"]
+        },
+        "household goods": {
+            "soap": [70, "pcs"],
+            "detergent": [60, "L"],
+            "sponge": [120, "pcs"],
+            "garbage bag": [40, "pcs"],
+            "napkins": [150, "pcs"]
+        }
+    }
+}
+
+print("Hello")  # Виведення привітання користувачеві
+print("What do you want to know?")  # Питання про те, що користувач хоче дізнатися
+
+while True:  # Початок циклу для взаємодії з користувачем
+    answer = input("1 - Status, 2 - Add, 3 - Take (off - Stop): ")  # Запит вибору дії у користувача
+    if answer == "off":  # Якщо користувач вводить "off", програма припиняє роботу
+        break  # Вихід з циклу та завершення програми
+    elif answer == "1":  # Якщо вибрано "1" — перегляд наявних товарів
+        print("Items in stock:")  # Виведення заголовку
+        for category, items in commodity["storage"].items():  # Перебір категорій товарів
+            print(f"{category.capitalize()}:")  # Виведення назви категорії з великої літери
+            for item, details in items.items():  # Перебір товарів в категорії
+                print(f"  {item}: {details[0]} {details[1]}")  # Виведення товару, його кількості та одиниці вимірювання
+    elif answer == "2":  # Якщо вибрано "2" — додавання товару
+        category = input("Enter category: ").lower()  # Запит категорії товару і приведення до нижнього регістру
+        item = input("Enter item name: ").lower()  # Запит назви товару і приведення до нижнього регістру
+        quantity = int(input("Enter quantity: "))  # Запит кількості товару для додавання
+        if category in commodity["storage"]:  # Перевірка, чи існує така категорія
+            if item in commodity["storage"][category]:  # Перевірка, чи є товар в категорії
+                commodity["storage"][category][item][0] += quantity  # Якщо товар є, додаємо кількість
+                print(f"Added {quantity} of {item} to {category}.")  # Повідомлення про успішне додавання
+            else:
+                commodity["storage"][category][item] = [quantity, "kg"]  # Якщо товару немає, додаємо новий товар
+                print(f"Added {quantity} of {item} to {category}.")  # Повідомлення про додавання нового товару
+        else:
+            print("Category does not exist.")  # Повідомлення, якщо категорія не існує
+    elif answer == "3":  # Якщо вибрано "3" — забір товару
+        category = input("Enter category: ").lower()  # Запит категорії товару і приведення до нижнього регістру
+        item = input("Enter item name: ").lower()  # Запит назви товару і приведення до нижнього регістру
+        quantity = int(input("Enter quantity: "))  # Запит кількості товару для забору
+        if category in commodity["storage"] and item in commodity["storage"][category]:  # Перевірка наявності товару
+            if commodity["storage"][category][item][0] >= quantity:  # Перевірка, чи вистачить товару на складі
+                commodity["storage"][category][item][0] -= quantity  # Якщо вистачає товару, зменшуємо кількість
+                print(f"Removed {quantity} of {item} from {category}.")  # Повідомлення про успішний забір
+            else:
+                print("Not enough stock.")  # Повідомлення, якщо товару не вистачає на складі
+        else:
+            print("Item not found.")  # Повідомлення, якщо товар не знайдений на складі
